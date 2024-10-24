@@ -1,7 +1,6 @@
 <template>
   <div>
     <a-tree
-      v-if="treeData.length"
       :checkable="true"
       v-model="checkedSiteId"
       :checkStrictly="true"
@@ -32,17 +31,14 @@ export default {
           children: [
             {
               id: "1198908685567560144",
-              statu: undefined,
               title: "A站",
               scopedSlots: { switcherIcon: "plus-square" },
             },
             {
               id: "11984789756097817201",
-              statu: undefined,
               title: "123",
             },
           ],
-          // disabled: true,
           id: -1,
           title: "所有站点",
           scopedSlots: { switcherIcon: "minus-square" },
