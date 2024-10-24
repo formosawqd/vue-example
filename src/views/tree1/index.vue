@@ -1,11 +1,22 @@
 <template>
   <div>
-    <a-tree :tree-data="treeData" :checkable="true" :defaultExpandAll="true">
-      //通过switcherIcon修改只能修改所有父级的图标,子级不受影响
-      <a-icon style="font-size: 16px" slot="switcherIcon" type="plus-circle" />
-      <!-- <a-icon type="plus-circle" /> -->
-      //此时子级定义一个插槽来修改子级图标
-      <a-icon slot="child" type="" />
+    <a-tree
+      v-if="treeData.length"
+      :checkable="true"
+      v-model="checkedSiteId"
+      :checkStrictly="true"
+      :tree-data="treeData"
+      defaultExpandAll
+      ref="treeForm"
+      :replaceFields="{ children: 'children', title: 'title', key: 'id' }"
+      @check="handleNodeClick"
+      @expand="expand"
+    >
+      <a-icon
+        style="font-size: 16px"
+        slot="switcherIcon"
+        :type="expands ? 'minus-square' : 'plus-square'"
+      />
     </a-tree>
   </div>
 </template>
@@ -14,45 +25,46 @@
 export default {
   data() {
     return {
+      checkedSiteId: [],
+      expands: true,
       treeData: [
         {
-          title: '下管街道',
-          key: '0',
           children: [
             {
-              title: '环球中心设备',
-              key: '0-0-0',
-              scopedSlots: { switcherIcon: 'child' },
+              id: "1198908685567560144",
+              statu: undefined,
+              title: "A站",
+              scopedSlots: { switcherIcon: "plus-square" },
             },
             {
-              title: '环球中心设备1',
-              key: '0-0-1',
-              scopedSlots: { switcherIcon: 'child' },
+              id: "11984789756097817201",
+              statu: undefined,
+              title: "123",
             },
-            {
-              title: '春山路监控',
-              key: '0-1-0',
-              scopedSlots: { switcherIcon: 'child' },
-            },
-            // {
-            //   title: '和平社区',
-            //   disableCheckbox: true,
-            //   key: '0-1',
-            //   children: [
-            //     {
-            //       title: '春山路监控',
-            //       key: '0-1-0',
-            //       scopedSlots: { switcherIcon: 'child' },
-            //     },
-            //   ],
-            // },
           ],
+          // disabled: true,
+          id: -1,
+          title: "所有站点",
+          scopedSlots: { switcherIcon: "minus-square" },
         },
       ],
     };
   },
   mounted() {
     console.log(111);
+  },
+  methods: {
+    expand(keys, e) {
+      console.log(e.expanded);
+      this.expands = e.expanded;
+    },
+    handleNodeClick(checkedKeys, { node }) {
+      console.log(checkedKeys);
+      console.log(node.dataRef);
+      this.checkedSiteId = [].concat(
+        checkedKeys.checked[checkedKeys.checked.length - 1]
+      );
+    },
   },
 };
 </script>
@@ -74,9 +86,11 @@ export default {
   border: 0;
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
-  content: ' ';
+  content: " ";
 }
 /deep/.ant-tree-checkbox-checked .ant-tree-checkbox-inner:hover {
   border: 0px;
 }
 </style>
+
+<!-- <style></style> -->
