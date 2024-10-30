@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { getList } from '../../api/index';
+import { getList } from "../../api/index";
 export default {
   props: {
     visiableDialog: {
@@ -56,7 +56,6 @@ export default {
   data() {
     return {
       tableData: [],
-
       pageInfo: {
         currentPage: 1,
         pageSize: 5,
@@ -71,28 +70,39 @@ export default {
   },
   methods: {
     handleSelectAll(data) {
-      console.log(data);
+      if (data.length) {
+        let temp = [...this.echoList, ...data];
+        const maps = new Map();
+        let res = temp.filter(
+          (item) => !maps.has(item.id) && maps.set(item.id, true)
+        );
+        this.echoList = res;
+      } else {
+        this.tableData.forEach((el) => {
+          this.echoList = this.echoList.filter((item) => item.id != el.id);
+        });
+      }
     },
     handleSelect(sels, row) {
-      console.log(sels);
-      console.log(row);
+      // console.log(sels);
+      // console.log(row);
       let selected = sels.length && sels.indexOf(row) !== -1;
       if (!selected) {
         this.echoList = this.echoList.filter((el) => el.id != row.id);
       } else {
         if (this.echoList.length >= 10) {
-          this.$message.warning('最多选择10个');
+          this.$message.warning("最多选择10个");
           return;
         }
         this.echoList.push(row);
       }
     },
     confirm() {
-      this.$emit('selectData', this.echoList);
+      this.$emit("selectData", this.echoList);
       this.handleClose();
     },
     handleClose() {
-      this.$emit('update:visiableDialog', false);
+      this.$emit("update:visiableDialog", false);
     },
     setRowSelected() {
       this.tableData.forEach((el) => {
@@ -107,7 +117,7 @@ export default {
         pageSize: this.pageInfo.pageSize,
       };
       let res = await getList(param);
-      console.log(res.data.data);
+      // console.log(res.data.data);
       this.tableData = res.data.data;
       this.setRowSelected();
     },
@@ -117,6 +127,9 @@ export default {
     handleSizeChange() {},
     handleCurrentChange(val) {
       this.pageInfo.currentPage = val;
+      this.tableData.forEach((el) => {
+        this.$refs.multipleTable.toggleRowSelection(el, false);
+      });
       this.getList();
     },
   },
