@@ -127,6 +127,9 @@ export default {
     handleSizeChange() {},
     handleCurrentChange(val) {
       this.pageInfo.currentPage = val;
+      // element表格跨页多选，全选，默认选中，重点是在这里，每次切换分页或者改变size
+      // 的时候，要把之前选中的row给清空，不然就会影响之后的选中，这里是个坑，element选中用的都是
+      // 自己手动给row选中，而不是像antdvue 传入key
       this.tableData.forEach((el) => {
         this.$refs.multipleTable.toggleRowSelection(el, false);
       });
