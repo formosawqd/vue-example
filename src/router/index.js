@@ -208,6 +208,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "tree" */ "../views/tree3/index.vue"),
   },
+  {
+    path: "/article",
+    name: "article",
+    component: () =>
+      import(/* webpackChunkName: "tree" */ "../views/article/index.vue"),
+  },
 ];
 
 const router = new VueRouter({
