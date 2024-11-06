@@ -214,8 +214,15 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "tree" */ "../views/article/index.vue"),
   },
+  {
+    path: "/storedialog",
+    name: "storedialog",
+    component: () =>
+      import(
+        /* webpackChunkName: "tree" */ "../views/storedialog/index/index.vue"
+      ),
+  },
 ];
-
 const router = new VueRouter({
   routes,
 });
