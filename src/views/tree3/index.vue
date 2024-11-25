@@ -14,6 +14,9 @@
     <template slot="leaf">
       <a-icon type="not"></a-icon>
     </template>
+    <template slot="leaf">
+      <a-icon type="not"></a-icon>
+    </template>
   </a-tree>
 </template>
 <script>
@@ -26,7 +29,19 @@ export default {
             {
               id: "1198908685567560144",
               title: "A站",
-              scopedSlots: { switcherIcon: "leaf" },
+              scopedSlots: { switcherIcon: "plus-square" },
+              children: [
+                {
+                  id: "11989086867560144",
+                  title: "A站",
+                  scopedSlots: { switcherIcon: "leaf" },
+                },
+                {
+                  id: "11984789756017201",
+                  title: "123",
+                  scopedSlots: { switcherIcon: "leaf" },
+                },
+              ],
             },
             {
               id: "11984789756097817201",
