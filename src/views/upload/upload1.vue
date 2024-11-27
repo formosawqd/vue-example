@@ -1,19 +1,29 @@
 <template>
-  <el-upload
-    class="upload-demo"
-    action=""
-    :http-request="uploadFiles"
-    :before-upload="beforeUpload"
-    :on-success="handleSuccess"
-    :on-error="handleError"
-    :file-list="fileList"
-    multiple
-  >
-    <el-button slot="trigger" type="primary">Select File</el-button>
+  <div>
+    <el-upload
+      class="upload-demo"
+      drag
+      action=""
+      :http-request="uploadFiles"
+      :before-upload="beforeUpload"
+      :on-success="handleSuccess"
+      :on-error="handleError"
+      :file-list="fileList"
+      multiple
+    >
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    </el-upload>
     <el-button style="margin-left: 10px" type="success" @click="submitUpload"
       >Upload</el-button
     >
-  </el-upload>
+    <!-- 这里为了展示以下上传文件的信息 -->
+    <!-- <div v-if="fileInfo">
+      <p>File Name: {{ fileInfo.name }}</p>
+      <p>File Size: {{ fileInfo.size }} bytes</p>
+      <p>File Type: {{ fileInfo.type }}</p>
+    </div> -->
+  </div>
 </template>
 
 <script>
@@ -25,11 +35,17 @@ export default {
   data() {
     return {
       fileList: [],
+      fileInfo: null, // Store the selected file info
     };
   },
   methods: {
     beforeUpload(file) {
       this.fileList.push(file);
+      //   this.fileInfo = {
+      //     name: file.name,
+      //     size: file.size,
+      //     type: file.type,
+      //   };
       return false; // 取消默认上传行为
     },
     uploadFiles() {
