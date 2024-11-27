@@ -72,9 +72,11 @@ export default {
 /deep/ .ant-tree-checkbox-inner {
   border-radius: 50%;
 }
+
 /deep/ .ant-tree-checkbox-checked .ant-tree-checkbox-inner::after {
   opacity: 0;
 }
+
 /deep/ .ant-tree-switcher-line-icon {
   color: #409eff;
 }

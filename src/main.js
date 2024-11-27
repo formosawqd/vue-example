@@ -7,6 +7,10 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
+import moment from "moment";
+import "moment/locale/zh-cn";
+moment.locale("zh-cn");
+Vue.prototype.$moment = moment;
 // 挂载全局使用的方法
 // import VueDraggableResizable from 'vue-draggable-resizable'
 // Vue.component('vue-draggable-resizable', VueDraggableResizable)

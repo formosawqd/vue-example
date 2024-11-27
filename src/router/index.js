@@ -219,9 +219,20 @@ const routes = [
     name: "table1000",
     component: () =>
       import(/* webpackChunkName: "tree" */ "../views/table1000/index.vue"),
+    path: "/article",
+    name: "article",
+    component: () =>
+      import(/* webpackChunkName: "tree" */ "../views/article/index.vue"),
+  },
+  {
+    path: "/storedialog",
+    name: "storedialog",
+    component: () =>
+      import(
+        /* webpackChunkName: "tree" */ "../views/storedialog/index/index.vue"
+      ),
   },
 ];
-
 const router = new VueRouter({
   routes,
 });
