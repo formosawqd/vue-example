@@ -208,6 +208,18 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "tree" */ "../views/tree3/index.vue"),
   },
+  {
+    path: "/lazytree",
+    name: "lazytree",
+    component: () =>
+      import(/* webpackChunkName: "tree" */ "../views/lazytree/index.vue"),
+  },
+  {
+    path: "/table1000",
+    name: "table1000",
+    component: () =>
+      import(/* webpackChunkName: "tree" */ "../views/table1000/index.vue"),
+  },
 ];
 
 const router = new VueRouter({
