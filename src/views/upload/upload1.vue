@@ -2,10 +2,12 @@
   <el-upload
     class="upload-demo"
     action=""
-    :http-request="uploadFile"
+    :http-request="uploadFiles"
     :before-upload="beforeUpload"
     :on-success="handleSuccess"
     :on-error="handleError"
+    :file-list="fileList"
+    multiple
   >
     <el-button slot="trigger" type="primary">Select File</el-button>
     <el-button style="margin-left: 10px" type="success" @click="submitUpload"
@@ -22,26 +24,27 @@ export default {
   name: "FileUpload",
   data() {
     return {
-      file: null,
+      fileList: [],
     };
   },
   methods: {
     beforeUpload(file) {
-      this.file = file;
+      this.fileList.push(file);
       return false; // 取消默认上传行为
     },
-    uploadFile() {
-      if (!this.file) {
-        this.$message.error("No file selected for upload.");
+    uploadFiles() {
+      if (!this.fileList.length) {
+        this.$message.error("请先选择文件");
         return;
       }
-      console.log(this.file);
-      uploadFile(this.file).then((res) => {
-        console.log(res);
-        this.$message.success("File uploaded successfully");
-      });
       const formData = new FormData();
-      console.log(formData);
+      this.fileList.forEach((el) => {
+        formData.append("files", el);
+      });
+      uploadFile(formData).then((res) => {
+        console.log(res);
+        this.$message.success("文件上传成功");
+      });
     },
     handleSuccess(response, file, fileList) {
       console.log("Success:", response);
@@ -50,7 +53,7 @@ export default {
       console.error("Error:", err);
     },
     submitUpload() {
-      this.uploadFile();
+      this.uploadFiles();
     },
   },
 };

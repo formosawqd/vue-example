@@ -5,9 +5,9 @@ export const getUsers = () => {
   return api.get("/list");
 };
 
-export const uploadFile = (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
+export const uploadFile = (formData) => {
+  console.log("formDataformData", formData);
+
   return api.post("/upload", formData, {
     headers: {
       "Content-Type": "multipart/form-data",

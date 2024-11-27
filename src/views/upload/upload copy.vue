@@ -2,7 +2,7 @@
   <el-upload
     class="upload-demo"
     action=""
-    :http-request="uploadFile"
+    :http-request="uploadFiles"
     :before-upload="beforeUpload"
     :on-success="handleSuccess"
     :on-error="handleError"
@@ -30,18 +30,19 @@ export default {
       this.file = file;
       return false; // 取消默认上传行为
     },
-    uploadFile() {
+    uploadFiles() {
       if (!this.file) {
         this.$message.error("No file selected for upload.");
         return;
       }
-      console.log(this.file);
-      uploadFile(this.file).then((res) => {
+      const formData = new FormData();
+
+      formData.append("file", this.file);
+
+      uploadFile(formData).then((res) => {
         console.log(res);
         this.$message.success("File uploaded successfully");
       });
-      const formData = new FormData();
-      console.log(formData);
     },
     handleSuccess(response, file, fileList) {
       console.log("Success:", response);
@@ -50,7 +51,7 @@ export default {
       console.error("Error:", err);
     },
     submitUpload() {
-      this.uploadFile();
+      this.uploadFiles();
     },
   },
 };

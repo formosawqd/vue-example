@@ -18,6 +18,12 @@ const routes = [
       import(/* webpackChunkName: "upload" */ "../views/upload/upload.vue"),
   },
   {
+    path: "/upload1",
+    name: "upload1",
+    component: () =>
+      import(/* webpackChunkName: "upload" */ "../views/upload/upload1.vue"),
+  },
+  {
     path: "/parent",
     name: "parent",
     component: () =>
