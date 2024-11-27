@@ -6,7 +6,9 @@
         <a-button @click="btn1">1</a-button>
         <a-button>2</a-button>
       </div>
-      <template slot="title"> <div>标题</div> </template>
+      <!-- 这里的slot='title' 和#title是一样的 -->
+      <template slot="title"> 标题 </template>
+      <!-- <template #title> 标题1 </template> -->
       <template slot="footer">
         <a-button type="primary">关了221</a-button></template
       >
@@ -15,7 +17,7 @@
 </template>
 
 <script>
-import Modal1 from './modal1.vue';
+import Modal1 from "./modal1.vue";
 export default {
   components: {
     Modal1,

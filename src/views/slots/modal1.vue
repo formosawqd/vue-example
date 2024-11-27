@@ -6,7 +6,7 @@
      -->
     <template v-for="(item, name) in $slots" :slot="name">
       <!-- 这里的则是接收外面实际写的插槽的内容 -->
-      <slot :name="name"></slot>
+      <slot :name="name" :msg="msg"></slot>
     </template>
   </a-modal>
 
@@ -35,20 +35,25 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      msg: "msg",
+    };
+  },
   mounted() {
     console.log(this.$slots);
   },
   methods: {
     handleOk() {},
     handleCancel() {
-      this.$emit('update:visible', false);
+      this.$emit("update:visible", false);
     },
   },
 };
 </script>
 
 <style scoped>
-.ant-modal div[aria-hidden='true'] {
+.ant-modal div[aria-hidden="true"] {
   display: none !important;
 }
 </style>

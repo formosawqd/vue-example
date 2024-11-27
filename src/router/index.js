@@ -147,6 +147,14 @@ const routes = [
       ),
   },
   {
+    path: "/slots3",
+    name: "slots3",
+    component: () =>
+      import(
+        /* webpackChunkName: "singleSelect" */ "../views/slots/index2.vue"
+      ),
+  },
+  {
     path: "/apply",
     name: "apply",
     component: () =>
@@ -231,6 +239,18 @@ const routes = [
       import(
         /* webpackChunkName: "tree" */ "../views/storedialog/index/index.vue"
       ),
+  },
+  {
+    path: "/drag",
+    name: "drag",
+    component: () =>
+      import(/* webpackChunkName: "tree" */ "../views/drag/index.vue"),
+  },
+  {
+    path: "/drag1",
+    name: "drag1",
+    component: () =>
+      import(/* webpackChunkName: "tree" */ "../views/drag/index1.vue"),
   },
 ];
 const router = new VueRouter({

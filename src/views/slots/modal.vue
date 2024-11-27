@@ -1,7 +1,9 @@
 <template>
   <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
     <!-- 动态渲染传递的默认插槽 -->
+    <!-- 这里的#[name]="scopeData" 实际上就是 slot-scope='scopeData' 把组件库的插槽的数据传出来， -->
     <template v-for="(_, name) in $slots" #[name]="scopeData">
+      <!-- v-bind="scopeData"这里的意思是又把scopeData传给外层的组件了 -->
       <slot :name="name" v-bind="scopeData"></slot>
     </template>
     <template> </template>
@@ -16,7 +18,7 @@
 <!-- 如果父组件有具名插槽,那么得看当前这个组件有没有具名的那个slot 有才会生效 -->
 <script>
 export default {
-  name: 'ModalComponent',
+  name: "ModalComponent",
   props: {
     visible: {
       type: Boolean,
@@ -29,10 +31,10 @@ export default {
   },
   methods: {
     handleOk() {
-      this.$emit('update:visible', false);
+      this.$emit("update:visible", false);
     },
     handleCancel() {
-      this.$emit('update:visible', false);
+      this.$emit("update:visible", false);
     },
   },
 };

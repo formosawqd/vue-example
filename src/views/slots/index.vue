@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ModalComponent from './modal.vue';
+import ModalComponent from "./modal.vue";
 
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     go() {
-      console.log('点击了go');
+      console.log("点击了go");
     },
     showModal() {
       this.isModalVisible = true;
