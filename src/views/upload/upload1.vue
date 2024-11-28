@@ -54,8 +54,8 @@ export default {
         return;
       }
       const formData = new FormData();
-      this.fileList.forEach((el) => {
-        formData.append("files", el);
+      this.fileList.forEach((file) => {
+        formData.append("files", file);
       });
       uploadFile(formData).then((res) => {
         console.log(res);

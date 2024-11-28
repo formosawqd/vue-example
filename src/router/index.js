@@ -59,6 +59,8 @@ const routes = [
     path: "/table",
     name: "table",
     component: () => import(/* webpackChunkName: "form  " */ "../views/Table"),
+  },
+  {
     path: "/tableSel",
     name: "tableSel",
     component: () =>
@@ -257,6 +259,12 @@ const routes = [
     name: "drag1",
     component: () =>
       import(/* webpackChunkName: "tree" */ "../views/drag/index1.vue"),
+  },
+  {
+    path: "/download",
+    name: "download",
+    component: () =>
+      import(/* webpackChunkName: "tree" */ "../views/download/index.vue"),
   },
 ];
 const router = new VueRouter({

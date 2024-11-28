@@ -15,6 +15,16 @@ export const uploadFile = (formData) => {
   });
 };
 
+export const getFiles = () => {
+  return api.get("/files");
+};
+// 下载文件
+export const downloadFile = (filename) => {
+  return api.get(`/download/${filename}`, {
+    responseType: "blob", // 必须设置为 blob
+  });
+};
+
 export const login = (params) => {
   return api.post("/login", params);
 };
@@ -32,6 +42,7 @@ export const getTree = (params) => {
 export const getLazyTree = (params) => {
   return api.get("/lazytree", params);
 };
+
 // export const getUsers = () => {
 //   return api.get('/list');
 // };
