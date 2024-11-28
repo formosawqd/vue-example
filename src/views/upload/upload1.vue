@@ -1,83 +1,168 @@
 <template>
-  <div>
-    <el-upload
-      class="upload-demo"
-      drag
-      action=""
-      :http-request="uploadFiles"
+  <a-card title="多文件上传" bordered :style="cardStyle">
+    <a-upload
       :before-upload="beforeUpload"
-      :on-success="handleSuccess"
-      :on-error="handleError"
-      :file-list="fileList"
-      multiple
+      :custom-request="customRequest"
+      :show-upload-list="false"
+      :multiple="true"
     >
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-    </el-upload>
-    <el-button style="margin-left: 10px" type="success" @click="submitUpload"
-      >Upload</el-button
-    >
-    <!-- 这里为了展示以下上传文件的信息 -->
-    <!-- <div v-if="fileInfo">
-      <p>File Name: {{ fileInfo.name }}</p>
-      <p>File Size: {{ fileInfo.size }} bytes</p>
-      <p>File Type: {{ fileInfo.type }}</p>
-    </div> -->
-  </div>
+      <a-button type="primary" icon="upload" block>
+        <span>点击上传</span>
+      </a-button>
+    </a-upload>
+
+    <div v-if="previewFiles.length > 0" class="preview-container">
+      <h3>文件预览：</h3>
+      <div style="display: flex">
+        <div
+          v-for="(file, index) in previewFiles"
+          :key="index"
+          class="preview-item"
+        >
+          <div v-if="file.isImage">
+            <img :src="file.preview" alt="file-preview" class="preview-image" />
+          </div>
+          <div v-else>
+            <p><strong>文件名：</strong>{{ file.name }}</p>
+            <p><strong>文件大小：</strong>{{ file.size }} bytes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a-card>
 </template>
 
 <script>
-import axios from "axios";
 import { uploadFile } from "@/api/index.js";
 
 export default {
-  name: "FileUpload",
   data() {
     return {
+      previewFiles: [], // 存储预览的文件信息
       fileList: [],
-      fileInfo: null, // Store the selected file info
     };
   },
   methods: {
+    // 文件上传前的处理
     beforeUpload(file) {
+      // console.log(file);
       this.fileList.push(file);
-      //   this.fileInfo = {
-      //     name: file.name,
-      //     size: file.size,
-      //     type: file.type,
-      //   };
-      return false; // 取消默认上传行为
+
+      // 附加文件的基本信息（文件名、大小、类型）
+      const fileInfo = {
+        name: file.name,
+        size: file.size,
+        isImage: file.type.startsWith("image/"),
+        preview: null,
+      };
+
+      // 使用 FileReader 读取文件并生成预览
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        fileInfo.preview = e.target.result;
+        // 将文件信息存储到 previewFiles 中
+        this.previewFiles.push(fileInfo);
+        console.log(" this.previewFiles", this.previewFiles);
+      };
+      reader.readAsDataURL(file); // 以 Base64 格式读取文件
+
+      return true; // 允许上传
     },
-    uploadFiles() {
-      if (!this.fileList.length) {
-        this.$message.error("请先选择文件");
-        return;
-      }
+
+    // 自定义上传处理方法
+    customRequest({ file, onSuccess, onError }) {
+      console.log(file);
       const formData = new FormData();
-      this.fileList.forEach((file) => {
-        formData.append("files", file);
-      });
+      formData.append("files", file);
       uploadFile(formData).then((res) => {
         console.log(res);
         this.$message.success("文件上传成功");
       });
     },
-    handleSuccess(response, file, fileList) {
-      console.log("Success:", response);
-    },
-    handleError(err, file, fileList) {
-      console.error("Error:", err);
-    },
-    submitUpload() {
-      this.uploadFiles();
+  },
+  computed: {
+    cardStyle() {
+      return {
+        borderRadius: "15px",
+        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#fff",
+      };
     },
   },
 };
 </script>
 
-<style>
-.upload-demo {
-  width: 300px;
-  margin: 50px auto;
+<style scoped>
+/* 页面整体背景色 */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ant Design Card 样式 */
+a-card {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* 上传按钮 */
+a-upload .ant-btn-primary {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+a-upload .ant-btn-primary:hover {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+/* 文件预览区域 */
+.preview-container {
+  margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.preview-container h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* 单个文件预览项 */
+.preview-item {
+  margin-bottom: 20px;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.preview-container p {
+  font-size: 16px;
+  color: #333;
+}
+
+/* 小屏幕适配 */
+@media (max-width: 768px) {
+  a-col {
+    span: 24;
+  }
+  .preview-container {
+    margin-top: 10px;
+  }
 }
 </style>

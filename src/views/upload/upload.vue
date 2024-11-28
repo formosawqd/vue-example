@@ -1,17 +1,29 @@
 <template>
-  <el-upload
-    class="upload-demo"
-    action=""
-    :http-request="uploadFile"
-    :before-upload="beforeUpload"
-    :on-success="handleSuccess"
-    :on-error="handleError"
-  >
-    <el-button slot="trigger" type="primary">Select File</el-button>
+  <div>
+    <el-upload
+      class="upload-demo"
+      drag
+      action=""
+      :http-request="uploadFiles"
+      :before-upload="beforeUpload"
+      :on-success="handleSuccess"
+      :on-error="handleError"
+      :file-list="fileList"
+      multiple
+    >
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    </el-upload>
     <el-button style="margin-left: 10px" type="success" @click="submitUpload"
       >Upload</el-button
     >
-  </el-upload>
+    <!-- 这里为了展示以下上传文件的信息 -->
+    <!-- <div v-if="fileInfo">
+      <p>File Name: {{ fileInfo.name }}</p>
+      <p>File Size: {{ fileInfo.size }} bytes</p>
+      <p>File Type: {{ fileInfo.type }}</p>
+    </div> -->
+  </div>
 </template>
 
 <script>
@@ -22,26 +34,33 @@ export default {
   name: "FileUpload",
   data() {
     return {
-      file: null,
+      fileList: [],
+      fileInfo: null, // Store the selected file info
     };
   },
   methods: {
     beforeUpload(file) {
-      this.file = file;
+      this.fileList.push(file);
+      //   this.fileInfo = {
+      //     name: file.name,
+      //     size: file.size,
+      //     type: file.type,
+      //   };
       return false; // 取消默认上传行为
     },
-    uploadFile() {
-      if (!this.file) {
-        this.$message.error("No file selected for upload.");
+    uploadFiles() {
+      if (!this.fileList.length) {
+        this.$message.error("请先选择文件");
         return;
       }
-      console.log(this.file);
-      uploadFile(this.file).then((res) => {
-        console.log(res);
-        this.$message.success("File uploaded successfully");
-      });
       const formData = new FormData();
-      console.log(formData);
+      this.fileList.forEach((file) => {
+        formData.append("files", file);
+      });
+      uploadFile(formData).then((res) => {
+        console.log(res);
+        this.$message.success("文件上传成功");
+      });
     },
     handleSuccess(response, file, fileList) {
       console.log("Success:", response);
@@ -50,7 +69,7 @@ export default {
       console.error("Error:", err);
     },
     submitUpload() {
-      this.uploadFile();
+      this.uploadFiles();
     },
   },
 };

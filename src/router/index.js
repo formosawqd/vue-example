@@ -14,7 +14,7 @@ const routes = [
     path: "/home1",
     name: "home1",
     component: () =>
-      import(/* webpackChunkName: "upload" */ "../views/home/index.vue"),
+      import(/* webpackChunkName: "home1" */ "../views/home/index.vue"),
   },
   {
     path: "/upload",
