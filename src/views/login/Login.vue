@@ -27,15 +27,14 @@
 </template>
 
 <script>
-import axios from '../../api/axios';
-import { login } from '../../api/index';
+import { login } from "../../api/index";
 
 export default {
   data() {
     return {
       loginForm: {
-        username: '',
-        password: '',
+        username: "user",
+        password: "password",
       },
       error: null,
     };
@@ -43,14 +42,15 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await login({
+        const res = await login({
           username: this.loginForm.username,
           password: this.loginForm.password,
         });
-        localStorage.setItem('token', response.data.token);
-        this.$router.push('/protected');
+        console.log(res);
+        localStorage.setItem("token", res.token);
+        this.$message.success(res.message);
       } catch (err) {
-        this.$message.error('Invalid credentials');
+        this.$message.error(err);
       }
     },
   },

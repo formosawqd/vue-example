@@ -1,5 +1,5 @@
 // import { Message } from "element-ui";
-import Vue from 'vue';
+import Vue from "vue";
 
 //防抖
 
@@ -31,5 +31,5 @@ export const throttle = (fn, delay) => {
 export const test = () => {
   // Message.success("成功");
   console.log(Vue.$message);
-  console.log('test');
+  console.log("test");
 };

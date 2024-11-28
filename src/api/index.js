@@ -2,12 +2,11 @@
 import api from "./axios";
 
 export const getUsers = () => {
-  return api.get("/list");
+  return api.get("/list", {});
 };
 
 export const uploadFile = (formData) => {
   console.log("formDataformData", formData);
-
   return api.post("/upload", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -16,17 +15,28 @@ export const uploadFile = (formData) => {
 };
 
 export const getFiles = () => {
-  return api.get("/files");
+  // 这里可以直接在后面加header设置，也可以加其他参数设置，具体要看这里的config有什么参数   具体看这里  https://www.axios-http.cn/docs/req_config
+  return api.get("/files", {
+    headers: {
+      "Content-Type": "multipart/json",
+    },
+  });
 };
 // 下载文件
 export const downloadFile = (filename) => {
+  // 这里get的第二个参数，也是配置项的其中之一
   return api.get(`/download/${filename}`, {
     responseType: "blob", // 必须设置为 blob
   });
 };
 
 export const login = (params) => {
-  return api.post("/login", params);
+  // 这里是post的写法，单独传header进去
+  return api.post("/login", params, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };
 export const isProtected = (params) => {
   return api.get("/protected");

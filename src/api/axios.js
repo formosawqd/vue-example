@@ -10,11 +10,17 @@ const api = axios.create({
 // 请求拦截器
 api.interceptors.request.use(
   (config) => {
+    console.log(config);
+
     // 可以在这里添加通用的请求配置，例如添加Token
     // config.headers.Authorization = `Bearer ${token}`;
     const token = localStorage.getItem("token");
     if (token) {
       config.headers["Authorization"] = token;
+    }
+    // 这里是看具体某支接口传配Content-Type没，如果传了，就用传进来的，没传的话，就用默认的
+    if (!config.headers["Content-Type"]) {
+      config.headers["Content-Type"] = "application/json";
     }
     return config;
   },
