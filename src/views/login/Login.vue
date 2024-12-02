@@ -37,9 +37,7 @@ export default {
       error: null,
     };
   },
-  mounted() {
-    console.log("mountedmounted");
-  },
+  mounted() {},
   methods: {
     async login() {
       try {

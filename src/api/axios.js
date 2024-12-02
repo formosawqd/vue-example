@@ -10,8 +10,6 @@ const api = axios.create({
 // 请求拦截器
 api.interceptors.request.use(
   (config) => {
-    console.log(config);
-
     // 可以在这里添加通用的请求配置，例如添加Token
     // config.headers.Authorization = `Bearer ${token}`;
     const token = localStorage.getItem("token");

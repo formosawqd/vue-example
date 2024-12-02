@@ -1,40 +1,22 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import store from "@/store";
-
-Vue.use(VueRouter);
-
-const staticRoutes = [
-  {
-    path: "/login",
-    component: () => import("@/views/login/Login.vue"),
-    meta: { public: true }, // 公开路由
-  },
-  {
-    path: "/",
-    redirect: "/products",
-  },
-];
-
-const routes = [
-  {
-    path: "/home1",
-    name: "home1",
-    component: () =>
-      import(/* webpackChunkName: "upload" */ "../views/home/index.vue"),
-  },
-  {
-    path: "/upload",
-    name: "upload",
-    component: () =>
-      import(/* webpackChunkName: "upload" */ "../views/upload/upload.vue"),
-  },
-  {
-    path: "/upload1",
-    name: "upload1",
-    component: () =>
-      import(/* webpackChunkName: "upload" */ "../views/upload/upload1.vue"),
-  },
+export const routeList = [
+  // {
+  //   path: "/home1",
+  //   name: "home1",
+  //   component: () =>
+  //     import(/* webpackChunkName: "upload" */ "../views/home/index.vue"),
+  // },
+  // {
+  //   path: "/upload",
+  //   name: "upload",
+  //   component: () =>
+  //     import(/* webpackChunkName: "upload" */ "../views/upload/upload.vue"),
+  // },
+  // {
+  //   path: "/upload1",
+  //   name: "upload1",
+  //   component: () =>
+  //     import(/* webpackChunkName: "upload" */ "../views/upload/upload1.vue"),
+  // },
   {
     path: "/parent",
     name: "parent",
@@ -55,12 +37,12 @@ const routes = [
         /* webpackChunkName: "debounce" */ "../views/debounce/debounce.vue"
       ),
   },
-  {
-    path: "/Login",
-    name: "Login",
-    component: () =>
-      import(/* webpackChunkName: "Login" */ "../views/login/Login.vue"),
-  },
+  // {
+  //   path: "/Login",
+  //   name: "Login",
+  //   component: () =>
+  //     import(/* webpackChunkName: "Login" */ "../views/login/Login.vue"),
+  // },
   {
     path: "/protected",
     name: "protected",
@@ -279,24 +261,3 @@ const routes = [
       import(/* webpackChunkName: "tree" */ "../views/download/index.vue"),
   },
 ];
-const router = new VueRouter({
-  routes,
-});
-router.beforeEach((to, from, next) => {
-  const role = store.state.role;
-  if (role) {
-    next();
-  } else {
-    next("/login");
-  }
-});
-export const loadDynamicRoutes = (routes) => {
-  routes.forEach((route) => {
-    const component = () => import(`@/views/${route.component}.vue`);
-    router.addRoute({
-      ...route,
-      component,
-    });
-  });
-};
-export default router;

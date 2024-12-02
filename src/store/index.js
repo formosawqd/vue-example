@@ -23,7 +23,6 @@ export default new Vuex.Store({
       state.routes = routes;
     },
     SetcollectInfo(state, playload) {
-      console.log(playload);
       //state是第一个参数必须有，playload是自定义的参数
       state.collectInfo = { ...state.collectInfo, ...playload };
     },
@@ -39,9 +38,11 @@ export default new Vuex.Store({
           message: message,
           type: "success",
         });
+
         sessionStorage.setItem("token", token);
         commit("setRole", role);
         sessionStorage.setItem("menuList", JSON.stringify(routes));
+
         loadDynamicRoutes(routes);
         router.push({ name: "Home" });
       }

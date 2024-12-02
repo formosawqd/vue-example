@@ -49,14 +49,13 @@ export default {
       console.error("获取菜单数据失败:", error);
     }
   },
-
+  mounted() {},
   methods: {
     logout() {
       sessionStorage.clear();
-      this.$router.push({ name: "Welcome" });
+      this.$router.push("/login"); // 跳转到登录页
     },
     clickMenu({ item, key, keyPath }) {
-      console.log(key);
       this.$router.push({
         name: key,
       });
