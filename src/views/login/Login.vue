@@ -27,31 +27,41 @@
 </template>
 
 <script>
-import { login } from "../../api/index";
-
 export default {
   data() {
     return {
       loginForm: {
-        username: "user",
-        password: "password",
+        username: "admin",
+        password: "123456",
       },
       error: null,
     };
   },
+  mounted() {
+    console.log("mountedmounted");
+  },
   methods: {
     async login() {
       try {
-        const res = await login({
+        this.$store.dispatch("login", {
           username: this.loginForm.username,
           password: this.loginForm.password,
         });
-        console.log(res);
-        localStorage.setItem("token", res.token);
-        this.$message.success(res.message);
-      } catch (err) {
-        this.$message.error(err);
-      }
+      } catch (error) {}
+      // try {
+      //   const res = await login({
+      //     username: this.loginForm.username,
+      //     password: this.loginForm.password,
+      //   });
+      //   console.log(res);
+      //   localStorage.setItem("token", res.token);
+      //   this.$singMessage({
+      //     message: res.message,
+      //     type: "success",
+      //   });
+      // } catch (err) {
+      //   this.$message.error(err);
+      // }
     },
   },
 };
