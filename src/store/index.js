@@ -46,7 +46,7 @@ export default new Vuex.Store({
         // loadDynamicRoutes(routes);
         addDynamicRoutes(routes);
 
-        router.push({ name: "Home" });
+        router.push({ path: "/home" });
       }
     },
   },

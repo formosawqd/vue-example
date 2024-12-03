@@ -1,12 +1,21 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import { routeList } from "./routes";
+import { name } from "@/views/cjs";
 Vue.use(VueRouter);
-
+//获取原型对象上的push函数
+const originalPush = VueRouter.prototype.push;
+//修改原型对象中的push方法
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err);
+};
 const routes = [
   {
     path: "/",
+    name: "Home",
     redirect: "/home",
+    component: () =>
+      import(/* webpackChunkName: "home" */ "../views/home/home.vue"),
   }, // 访问根路径时重定向到 /home
   {
     path: "/login",
@@ -21,17 +30,13 @@ const router = new VueRouter({
 });
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!sessionStorage.getItem("token"); // 判断是否有登录标识（如 token）
-
   if (to.meta.requiresAuth && !isAuthenticated) {
-    console.log(1);
     // 如果目标路由需要登录且用户未登录
     next("/login"); // 跳转到登录页
   } else if (to.path === "/login" && isAuthenticated) {
-    console.log(2);
     // 如果用户已登录，防止访问登录页或欢迎页
     next("/home");
   } else {
-    console.log(3);
     next(); // 放行
   }
 });
@@ -61,32 +66,5 @@ export const addDynamicRoutes = (backendRoutes) => {
     router.addRoute(route); // Add route to the router
   });
 };
-
-// Add routes when the app initializes
-
-// export const loadDynamicRoutes = (routes) => {
-//   const routeNameList = router.getRoutes().map((el) => el.name); //这里非得这样才能查询到目前存在的路由  router.options.routes 看不到动态添加的路由
-//   console.log(routeNameList);
-
-//   routes.forEach((route) => {
-//     if (route.children?.length) {
-//       loadDynamicRoutes(route.children);
-//     }
-//     if (routeNameList.includes(route.name)) {
-//       //如果已经加了路由了，就不需要再添加了
-//       return;
-//     }
-
-//     const component = () =>
-//       import(
-//         `@/views/${route.name.toLocaleLowerCase()}/${route.component}.vue`
-//       );
-//     // 这里就是动态的添加路由
-//     router.addRoute({
-//       ...route,
-//       component,
-//     });
-//   });
-// };
 
 export default router;

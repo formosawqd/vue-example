@@ -1,7 +1,7 @@
 <template>
   <a-layout>
     <a-layout-sider
-      width="200"
+      width="160"
       style="height: 100vh"
       class="site-layout-background"
     >
@@ -35,11 +35,13 @@
       </a-menu>
     </a-layout-sider>
     <a-layout style="height: 100%">
-      <a-layout-header style="height: 80px">
-        <span>home</span>
-        <a-button @click="logout"> exit</a-button></a-layout-header
+      <a-layout-header class="header" style="height: 80px">
+        <div class="logo">
+          <img src="../../assets/img/1 (1).png" alt="" />
+        </div>
+        <a-button class="btn" @click="logout"> exit</a-button></a-layout-header
       >
-      <a-layout-content style="height: calc(100vh - 80px); padding: 20px">
+      <a-layout-content style="height: calc(100vh - 80px); padding: 15px">
         <router-view />
       </a-layout-content>
     </a-layout>
@@ -58,6 +60,7 @@ export default {
   async created() {
     try {
       this.menuData = JSON.parse(sessionStorage.getItem("menuList"));
+      console.log(this.menuData);
     } catch (error) {
       console.error("获取菜单数据失败:", error);
     }
@@ -69,6 +72,8 @@ export default {
     },
   },
   mounted() {
+    console.log(11111);
+
     // 这里根据路由需要配置其他信息，就直接存sessionStorage 里，也是一样的
     this.openKeys = sessionStorage.getItem("openKeys")
       ? [sessionStorage.getItem("openKeys")]
@@ -77,7 +82,6 @@ export default {
   },
   methods: {
     handleOpenChange(keys) {
-      console.log(...keys);
       this.openKeys = keys;
       sessionStorage.setItem("openKeys", keys);
     },
@@ -86,6 +90,8 @@ export default {
       this.$router.push("/login"); // 跳转到登录页
     },
     clickMenu({ item, key, keyPath }) {
+      console.log(key);
+      console.log(keyPath);
       this.$router.push({
         path: key,
       });
@@ -148,5 +154,19 @@ export default {
 .a-sub-menu-title:hover {
   background-color: rgba(24, 144, 255, 0.2); /* 鼠标悬浮背景色 */
   color: #1890ff; /* 鼠标悬浮文字颜色 */
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .logo {
+    height: 80px;
+    width: 80px;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
 }
 </style>
