@@ -62,9 +62,10 @@ export default {
     },
   },
   mounted() {
-    console.log(sessionStorage.getItem("openKeys"));
-
-    this.openKeys = [sessionStorage.getItem("openKeys")] || [];
+    // 这里根据路由需要配置其他信息，就直接存sessionStorage 里，也是一样的
+    this.openKeys = sessionStorage.getItem("openKeys")
+      ? [sessionStorage.getItem("openKeys")]
+      : [];
     console.log(this.openKeys);
   },
   methods: {
