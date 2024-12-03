@@ -60,7 +60,6 @@ export default {
   async created() {
     try {
       this.menuData = JSON.parse(sessionStorage.getItem("menuList"));
-      console.log(this.menuData);
     } catch (error) {
       console.error("获取菜单数据失败:", error);
     }
@@ -72,13 +71,11 @@ export default {
     },
   },
   mounted() {
-    console.log(11111);
-
     // 这里根据路由需要配置其他信息，就直接存sessionStorage 里，也是一样的
     this.openKeys = sessionStorage.getItem("openKeys")
       ? [sessionStorage.getItem("openKeys")]
       : [];
-    console.log(this.openKeys);
+    console.log("this.menuData", this.menuData);
   },
   methods: {
     handleOpenChange(keys) {

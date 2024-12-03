@@ -11,11 +11,11 @@ VueRouter.prototype.push = function push(location) {
 };
 const routes = [
   {
-    path: "/",
+    path: "/home",
     name: "Home",
-    redirect: "/home",
     component: () =>
       import(/* webpackChunkName: "home" */ "../views/home/home.vue"),
+    children: [],
   }, // 访问根路径时重定向到 /home
   {
     path: "/login",
@@ -62,9 +62,24 @@ const transformRoutes = (routes) => {
 // Add Routes Dynamically
 export const addDynamicRoutes = (backendRoutes) => {
   const transformedRoutes = transformRoutes(backendRoutes);
-  transformedRoutes.forEach((route) => {
-    router.addRoute(route); // Add route to the router
+  console.log("transformedRoutes", transformedRoutes);
+  router.options.routes.forEach((el) => {
+    if (el.name == "Home") {
+      el.children.push(transformedRoutes);
+    }
   });
+  // transformedRoutes.forEach((route) => {
+  //   console.log(router);
+  //   if (condition) {
+
+  //   }
+  //   router.addRoute("home", route);
+  //   // router.addRoute(route); // Add route to the router
+  // });
+  console.log(router);
+
+  const routeNameList = router.getRoutes();
+  console.log("routeNameList", routeNameList);
 };
 
 export default router;

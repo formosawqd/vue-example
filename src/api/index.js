@@ -53,6 +53,12 @@ export const getLazyTree = (params) => {
   return api.get("/lazytree", params);
 };
 
+export const getRoute = (params) => {
+  return api.get("/getRoute", {
+    params,
+  });
+};
+
 // export const getUsers = () => {
 //   return api.get('/list');
 // };

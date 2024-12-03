@@ -3,6 +3,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { Message } from "element-ui";
 import { login } from "@/api/index";
+import { storageHandler } from "@/utils/index";
 import router, { loadDynamicRoutes, addDynamicRoutes } from "@/router";
 
 Vue.use(Vuex);
@@ -17,6 +18,8 @@ export default new Vuex.Store({
   },
   mutations: {
     setRole(state, role) {
+      console.log("mutations setRole");
+
       state.role = role;
     },
     setRoutes(state, routes) {
@@ -41,12 +44,13 @@ export default new Vuex.Store({
 
         sessionStorage.setItem("token", token);
         commit("setRole", role);
-        sessionStorage.setItem("menuList", JSON.stringify(routes));
+        // sessionStorage.setItem("role", role);
+        storageHandler.setItem("role", role);
+
+        // sessionStorage.setItem("menuList", JSON.stringify(routes));
 
         // loadDynamicRoutes(routes);
-        addDynamicRoutes(routes);
-
-        router.push({ path: "/home" });
+        // addDynamicRoutes(routes);
       }
     },
   },
