@@ -53,8 +53,15 @@ export const getLazyTree = (params) => {
   return api.get("/lazytree", params);
 };
 
+// 获取路由
 export const getRoute = (params) => {
   return api.get("/getRoute", {
+    params,
+  });
+};
+// 获取菜单
+export const getMenu = (params) => {
+  return api.get("/getMenu", {
     params,
   });
 };

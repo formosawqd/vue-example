@@ -15,7 +15,28 @@ const routes = [
     name: "Home",
     component: () =>
       import(/* webpackChunkName: "home" */ "../views/home/home.vue"),
-    children: [],
+    children: [
+      {
+        path: "/table",
+        name: "table",
+        component: () =>
+          import(/* webpackChunkName: "table" */ "../views/table/table.vue"),
+      },
+      {
+        path: "/welcome",
+        name: "welcome",
+        component: () =>
+          import(
+            /* webpackChunkName: "welcome" */ "../views/welcome/welcome.vue"
+          ),
+      },
+      {
+        path: "/upload",
+        name: "Upload",
+        component: () =>
+          import(/* webpackChunkName: "upload" */ "../views/upload/upload.vue"),
+      },
+    ],
   }, // 访问根路径时重定向到 /home
   {
     path: "/login",
@@ -43,7 +64,7 @@ router.beforeEach((to, from, next) => {
 
 // Dynamic Import Function
 const loadComponent = (route) => () =>
-  import(`@/views/${route.name.toLocaleLowerCase()}/${route.component}.vue`); // Adjust the path as per your structure
+  import(`@/views/${route.component}/${route.component}.vue`); // Adjust the path as per your structure
 
 // Function to Transform Routes
 const transformRoutes = (routes) => {
@@ -51,7 +72,7 @@ const transformRoutes = (routes) => {
     const transformedRoute = {
       path: route.path,
       name: route.name,
-      component: loadComponent(route),
+      component: loadComponent(route), // Adjust the path as per your structure
       meta: route.meta || {},
       children: route.children ? transformRoutes(route.children) : undefined,
     };
@@ -61,25 +82,45 @@ const transformRoutes = (routes) => {
 
 // Add Routes Dynamically
 export const addDynamicRoutes = (backendRoutes) => {
-  const transformedRoutes = transformRoutes(backendRoutes);
-  console.log("transformedRoutes", transformedRoutes);
-  router.options.routes.forEach((el) => {
-    if (el.name == "Home") {
-      el.children.push(transformedRoutes);
-    }
-  });
-  // transformedRoutes.forEach((route) => {
-  //   console.log(router);
-  //   if (condition) {
-
-  //   }
-  //   router.addRoute("home", route);
-  //   // router.addRoute(route); // Add route to the router
-  // });
-  console.log(router);
-
-  const routeNameList = router.getRoutes();
-  console.log("routeNameList", routeNameList);
+  console.log(router.options.routes);
+  // const transformedRoutes = transformRoutes(backendRoutes);
+  // console.log("transformedRoutes", transformedRoutes);
+  // const homeRoute = router.options.routes.find((route) => route.name == "Home");
+  // if (homeRoute) {
+  //   console.log(homeRoute);
+  //   console.log(router.options.routes);
+  //   homeRoute.children = [...homeRoute.children, ...transformedRoutes];
+  //   router.addRoute(router.options.routes); // 更新路由
+  // }
+  // router.options.routes = [...transformedRoutes];
+  // // router.options.routes.forEach((el) => {
+  // //   if (el.name == "Home") {
+  // //     el.children.push(transformedRoutes);
+  // //   }
+  // // });
+  // // transformedRoutes.forEach((route) => {
+  // // console.log(router);
+  // //   if (condition) {
+  // //   }
+  // //   router.addRoute("home", route);
+  // //   // router.addRoute(route); // Add route to the router
+  // // });
+  // // console.log(router);
+  // // const routeNameList = router.getRoutes();
+  // console.log("routeNameList", router.options);
+  // console.log(backendRoutes);
+  // const childRoutes = backendRoutes.map((route) => ({
+  //   path: route.path,
+  //   name: route.name,
+  //   component: loadComponent(route),
+  // }));
+  // console.log("childRoutes", childRoutes);
+  // // 动态添加子路由到 home 路由
+  // const homeRoute = router.options.routes.find((route) => route.name == "Home");
+  // if (homeRoute) {
+  //   homeRoute.children = [...homeRoute.children, ...childRoutes];
+  //   router.addRoute(router.options.routes); // 更新路由
+  // }
 };
 
 export default router;

@@ -54,20 +54,6 @@ export default {
           password: this.loginForm.password,
         });
       } catch (error) {}
-      // try {
-      //   const res = await login({
-      //     username: this.loginForm.username,
-      //     password: this.loginForm.password,
-      //   });
-      //   console.log(res);
-      //   localStorage.setItem("token", res.token);
-      //   this.$singMessage({
-      //     message: res.message,
-      //     type: "success",
-      //   });
-      // } catch (err) {
-      //   this.$message.error(err);
-      // }
     },
   },
 };

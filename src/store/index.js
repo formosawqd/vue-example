@@ -2,7 +2,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { Message } from "element-ui";
-import { login } from "@/api/index";
+import { login, getMenu, getRoute } from "@/api/index";
 import { storageHandler } from "@/utils/index";
 import router, { loadDynamicRoutes, addDynamicRoutes } from "@/router";
 
@@ -44,13 +44,22 @@ export default new Vuex.Store({
 
         sessionStorage.setItem("token", token);
         commit("setRole", role);
-        // sessionStorage.setItem("role", role);
         storageHandler.setItem("role", role);
 
-        // sessionStorage.setItem("menuList", JSON.stringify(routes));
+        // 获取菜单
+        const { menu } = await getMenu({ role });
+        console.log("res", menu);
+        // sessionStorage.setItem("role", role);
 
-        // loadDynamicRoutes(routes);
-        // addDynamicRoutes(routes);
+        // 获取路由
+        const { routes } = await getRoute({ role });
+        console.log("routes", routes);
+        addDynamicRoutes(routes);
+
+        // storageHandler.setItem("menuList", JSON.stringify(menu));
+
+        sessionStorage.setItem("menuList", JSON.stringify(menu));
+        router.push({ path: "/home" });
       }
     },
   },

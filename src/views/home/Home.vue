@@ -17,12 +17,26 @@
       >
         <!-- 动态渲染菜单项 -->
         <template v-for="menuItem in menuData">
-          <a-menu-item v-if="!menuItem.children" :key="menuItem.path">
+          <a-sub-menu :key="menuItem.path">
+            <span slot="title"
+              ><a-icon type="appstore" /><span>{{
+                menuItem.menuName
+              }}</span></span
+            >
+
+            <template v-for="child in menuItem.children">
+              <a-menu-item :key="child.path">
+                <a-icon type="appstore" />
+                <span>{{ child.menuName }}</span>
+              </a-menu-item>
+            </template>
+          </a-sub-menu>
+          <!-- <a-menu-item v-if="!menuItem.children" :key="menuItem.path">
             <a-icon :type="menuItem.icon" />
             <span>{{ menuItem.label }}</span>
           </a-menu-item>
 
-          <!-- 渲染子菜单 -->
+        
           <a-sub-menu v-else :key="menuItem.path" :title="menuItem.label">
             <template v-for="child in menuItem.children">
               <a-menu-item :key="child.path">
@@ -30,7 +44,7 @@
                 <span>{{ child.label }}</span>
               </a-menu-item>
             </template>
-          </a-sub-menu>
+          </a-sub-menu> -->
         </template>
       </a-menu>
     </a-layout-sider>
@@ -49,6 +63,8 @@
 </template>
 
 <script>
+import { storageHandler } from "@/utils/index";
+import router from "@/router";
 export default {
   name: "AppMenu",
   data() {
@@ -57,13 +73,7 @@ export default {
       openKeys: [], // Tracks which sub-menus are expanded
     };
   },
-  async created() {
-    try {
-      this.menuData = JSON.parse(sessionStorage.getItem("menuList"));
-    } catch (error) {
-      console.error("获取菜单数据失败:", error);
-    }
-  },
+  async created() {},
   watch: {},
   computed: {
     selectedKey() {
@@ -71,6 +81,18 @@ export default {
     },
   },
   mounted() {
+    try {
+      this.menuData = JSON.parse(sessionStorage.getItem("menuList"));
+    } catch (error) {
+      console.error("获取菜单数据失败:", error);
+    }
+
+    storageHandler.onChange((key, value) => {
+      console.log("key", key);
+
+      console.log(value);
+    });
+
     // 这里根据路由需要配置其他信息，就直接存sessionStorage 里，也是一样的
     this.openKeys = sessionStorage.getItem("openKeys")
       ? [sessionStorage.getItem("openKeys")]
@@ -87,8 +109,6 @@ export default {
       this.$router.push("/login"); // 跳转到登录页
     },
     clickMenu({ item, key, keyPath }) {
-      console.log(key);
-      console.log(keyPath);
       this.$router.push({
         path: key,
       });
