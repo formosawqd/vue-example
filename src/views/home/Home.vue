@@ -6,18 +6,21 @@
         :default-selected-keys="[selectedKey]"
         style="height: 100%; border-right: 0"
         @click="clickMenu"
+        :openKeys="openKeys"
+        @openChange="handleOpenChange"
+        :selectedKey="selectedKey"
       >
         <!-- 动态渲染菜单项 -->
         <template v-for="menuItem in menuData">
-          <a-menu-item v-if="!menuItem.children" :key="menuItem.name">
+          <a-menu-item v-if="!menuItem.children" :key="menuItem.path">
             <a-icon :type="menuItem.icon" />
             <span>{{ menuItem.label }}</span>
           </a-menu-item>
 
           <!-- 渲染子菜单 -->
-          <a-sub-menu v-else :key="menuItem.name" :title="menuItem.label">
+          <a-sub-menu v-else :key="menuItem.path" :title="menuItem.label">
             <template v-for="child in menuItem.children">
-              <a-menu-item :key="child.name">
+              <a-menu-item :key="child.path">
                 <a-icon :type="child.icon" />
                 <span>{{ child.label }}</span>
               </a-menu-item>
@@ -26,10 +29,13 @@
         </template>
       </a-menu>
     </a-layout-sider>
-    <div class="right">
-      <span>home</span>
-      <a-button @click="logout"> exit</a-button>
-    </div>
+    <a-layout>
+      <a-layout-header>
+        <span>home</span>
+        <a-button @click="logout"> exit</a-button></a-layout-header
+      >
+      <a-layout-content> <router-view /> </a-layout-content>
+    </a-layout>
   </a-layout>
 </template>
 
@@ -39,7 +45,7 @@ export default {
   data() {
     return {
       menuData: [], // 存储从后端获取的菜单数据
-      selectedKey: "Home", // 当前选中的菜单项的 key
+      openKeys: [], // Tracks which sub-menus are expanded
     };
   },
   async created() {
@@ -49,15 +55,31 @@ export default {
       console.error("获取菜单数据失败:", error);
     }
   },
-  mounted() {},
+  watch: {},
+  computed: {
+    selectedKey() {
+      return this.$route.path || "/home";
+    },
+  },
+  mounted() {
+    console.log(sessionStorage.getItem("openKeys"));
+
+    this.openKeys = [sessionStorage.getItem("openKeys")] || [];
+    console.log(this.openKeys);
+  },
   methods: {
+    handleOpenChange(keys) {
+      console.log(...keys);
+      this.openKeys = keys;
+      sessionStorage.setItem("openKeys", keys);
+    },
     logout() {
       sessionStorage.clear();
       this.$router.push("/login"); // 跳转到登录页
     },
     clickMenu({ item, key, keyPath }) {
       this.$router.push({
-        name: key,
+        path: key,
       });
     },
   },
@@ -69,6 +91,7 @@ export default {
   background: #fff;
 }
 .right {
+  height: 100vh;
   width: 80%;
   display: flex;
   justify-content: space-between;

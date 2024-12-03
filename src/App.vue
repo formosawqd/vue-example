@@ -9,7 +9,7 @@
 
 <script>
 import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
-import { loadDynamicRoutes } from "@/router/index";
+import { loadDynamicRoutes, addDynamicRoutes } from "@/router/index";
 export default {
   data() {
     return {
@@ -18,7 +18,8 @@ export default {
   },
   created() {
     let routes = JSON.parse(sessionStorage.getItem("menuList"));
-    routes && loadDynamicRoutes(routes);
+    // routes && loadDynamicRoutes(routes);
+    routes && addDynamicRoutes(routes);
   },
 };
 </script>

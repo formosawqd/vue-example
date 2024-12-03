@@ -3,7 +3,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { Message } from "element-ui";
 import { login } from "@/api/index";
-import router, { loadDynamicRoutes } from "@/router";
+import router, { loadDynamicRoutes, addDynamicRoutes } from "@/router";
 
 Vue.use(Vuex);
 
@@ -43,7 +43,9 @@ export default new Vuex.Store({
         commit("setRole", role);
         sessionStorage.setItem("menuList", JSON.stringify(routes));
 
-        loadDynamicRoutes(routes);
+        // loadDynamicRoutes(routes);
+        addDynamicRoutes(routes);
+
         router.push({ name: "Home" });
       }
     },
