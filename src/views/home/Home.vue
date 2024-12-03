@@ -1,6 +1,10 @@
 <template>
   <a-layout>
-    <a-layout-sider width="256" class="site-layout-background">
+    <a-layout-sider
+      width="200"
+      style="height: 100vh"
+      class="site-layout-background"
+    >
       <a-menu
         mode="inline"
         :default-selected-keys="[selectedKey]"
@@ -9,6 +13,7 @@
         :openKeys="openKeys"
         @openChange="handleOpenChange"
         :selectedKey="selectedKey"
+        theme="dark"
       >
         <!-- 动态渲染菜单项 -->
         <template v-for="menuItem in menuData">
@@ -29,12 +34,14 @@
         </template>
       </a-menu>
     </a-layout-sider>
-    <a-layout>
-      <a-layout-header>
+    <a-layout style="height: 100%">
+      <a-layout-header style="height: 80px">
         <span>home</span>
         <a-button @click="logout"> exit</a-button></a-layout-header
       >
-      <a-layout-content> <router-view /> </a-layout-content>
+      <a-layout-content style="height: calc(100vh - 80px); padding: 20px">
+        <router-view />
+      </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
@@ -96,5 +103,50 @@ export default {
   width: 80%;
   display: flex;
   justify-content: space-between;
+}
+
+/* 主菜单容器 */
+.a-menu {
+  background-color: #001529; /* 修改菜单背景色 */
+  color: #ffffff; /* 修改文字颜色 */
+  font-size: 14px; /* 调整文字大小 */
+}
+
+/* 菜单项样式 */
+.a-menu-item {
+  border-radius: 4px; /* 圆角效果 */
+  margin: 4px 0; /* 调整间距 */
+  padding-left: 16px !important; /* 调整文字的左边距 */
+}
+
+/* 高亮菜单项 */
+.a-menu-item-selected {
+  background-color: #1890ff !important; /* 高亮背景色 */
+  color: #ffffff !important; /* 高亮文字颜色 */
+  font-weight: bold; /* 高亮加粗 */
+  box-shadow: 0 0 6px rgba(24, 144, 255, 0.6); /* 添加阴影效果 */
+}
+
+/* 子菜单样式 */
+.a-sub-menu {
+  margin: 4px 0; /* 子菜单间距 */
+}
+
+/* 子菜单标题样式 */
+.a-sub-menu-title {
+  color: #8c8c8c; /* 子菜单标题文字颜色 */
+  font-weight: 500; /* 字体加粗 */
+}
+
+/* 子菜单展开箭头 */
+.a-menu-submenu-arrow {
+  color: #ffffff; /* 修改箭头颜色 */
+}
+
+/* Hover 效果 */
+.a-menu-item:hover,
+.a-sub-menu-title:hover {
+  background-color: rgba(24, 144, 255, 0.2); /* 鼠标悬浮背景色 */
+  color: #1890ff; /* 鼠标悬浮文字颜色 */
 }
 </style>
