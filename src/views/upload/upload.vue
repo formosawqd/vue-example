@@ -59,7 +59,10 @@ export default {
       });
       uploadFile(formData).then((res) => {
         console.log(res);
-        this.$message.success("文件上传成功");
+        this.$singMessage({
+          type: "success",
+          message: "文件上传成功",
+        });
       });
     },
     handleSuccess(response, file, fileList) {

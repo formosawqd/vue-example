@@ -19,14 +19,14 @@
         <template v-for="menuItem in menuData">
           <a-sub-menu :key="menuItem.path">
             <span slot="title"
-              ><a-icon type="appstore" /><span>{{
+              ><a-icon :type="menuItem.icon" /><span>{{
                 menuItem.menuName
               }}</span></span
             >
 
             <template v-for="child in menuItem.children">
               <a-menu-item :key="child.path">
-                <a-icon type="appstore" />
+                <a-icon :type="child.icon" />
                 <span>{{ child.menuName }}</span>
               </a-menu-item>
             </template>
@@ -86,8 +86,13 @@ export default {
         : [];
     },
     handleOpenChange(keys) {
-      this.openKeys = keys;
-      sessionStorage.setItem("openKeys", keys);
+      if (keys && keys.length) {
+        let key = [keys[keys.length - 1]];
+        this.openKeys = key;
+        sessionStorage.setItem("openKeys", key);
+      } else {
+        this.openKeys = [];
+      }
     },
     logout() {
       sessionStorage.clear();

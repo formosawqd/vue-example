@@ -12,6 +12,7 @@ const routes = [
   {
     path: "/home",
     name: "Home",
+    // redirect: "/table",
     component: () =>
       import(/* webpackChunkName: "home" */ "../views/home/home.vue"),
     children: [],
@@ -50,7 +51,7 @@ const transformRoutes = (routes) => {
       path: route.path,
       name: route.name,
       component: () =>
-        import("@/views/" + route.component + "/" + route.component + ".vue"), // Adjust the path as per your structure
+        import("@/views/" + route.folder + "/" + route.file + ".vue"), // 这里非得用+拼接才正常
       meta: route.meta || {},
       children: route.children ? transformRoutes(route.children) : undefined,
     };
@@ -62,7 +63,7 @@ const transformRoutes = (routes) => {
 export const addDynamicRoutes = (backendRoutes) => {
   const transformedRoutes = transformRoutes(backendRoutes);
   const homeRoute = router.options.routes.find((route) => route.name == "Home");
-  if (homeRoute) {
+  if (homeRoute && !homeRoute.children?.length) {
     homeRoute.children = [...homeRoute.children, ...transformedRoutes];
     router.addRoute(homeRoute); // 更新路由
   }

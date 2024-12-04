@@ -66,6 +66,11 @@ export const getMenu = (params) => {
   });
 };
 
+// 获取mian列表
+export const getInterview = (params) => {
+  return api.get("/getInterview");
+};
+
 // export const getUsers = () => {
 //   return api.get('/list');
 // };

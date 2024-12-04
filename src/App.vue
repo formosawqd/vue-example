@@ -21,7 +21,7 @@ export default {
   },
   created() {},
   mounted() {
-    console.log("加载了app");
+    // console.log("加载了app");
     this.init();
   },
   computed: {},
