@@ -31,20 +31,6 @@
               </a-menu-item>
             </template>
           </a-sub-menu>
-          <!-- <a-menu-item v-if="!menuItem.children" :key="menuItem.path">
-            <a-icon :type="menuItem.icon" />
-            <span>{{ menuItem.label }}</span>
-          </a-menu-item>
-
-        
-          <a-sub-menu v-else :key="menuItem.path" :title="menuItem.label">
-            <template v-for="child in menuItem.children">
-              <a-menu-item :key="child.path">
-                <a-icon :type="child.icon" />
-                <span>{{ child.label }}</span>
-              </a-menu-item>
-            </template>
-          </a-sub-menu> -->
         </template>
       </a-menu>
     </a-layout-sider>
@@ -64,9 +50,8 @@
 
 <script>
 import { storageHandler } from "@/utils/index";
-import router from "@/router";
 export default {
-  name: "AppMenu",
+  name: "home",
   data() {
     return {
       menuData: [], // 存储从后端获取的菜单数据
@@ -81,25 +66,25 @@ export default {
     },
   },
   mounted() {
-    try {
-      this.menuData = JSON.parse(sessionStorage.getItem("menuList"));
-    } catch (error) {
-      console.error("获取菜单数据失败:", error);
-    }
-
-    storageHandler.onChange((key, value) => {
-      console.log("key", key);
-
-      console.log(value);
-    });
-
-    // 这里根据路由需要配置其他信息，就直接存sessionStorage 里，也是一样的
-    this.openKeys = sessionStorage.getItem("openKeys")
-      ? [sessionStorage.getItem("openKeys")]
-      : [];
-    console.log("this.menuData", this.menuData);
+    this.init();
   },
   methods: {
+    init() {
+      try {
+        this.menuData = JSON.parse(sessionStorage.getItem("menuList"));
+      } catch (error) {
+        console.error("获取菜单数据失败:", error);
+      }
+
+      storageHandler.onChange((key, value) => {
+        console.log("key", key);
+      });
+
+      // 这里根据路由需要配置其他信息，就直接存sessionStorage 里，也是一样的
+      this.openKeys = sessionStorage.getItem("openKeys")
+        ? [sessionStorage.getItem("openKeys")]
+        : [];
+    },
     handleOpenChange(keys) {
       this.openKeys = keys;
       sessionStorage.setItem("openKeys", keys);

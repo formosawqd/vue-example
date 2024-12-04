@@ -55,6 +55,7 @@ export default new Vuex.Store({
         const { routes } = await getRoute({ role });
         console.log("routes", routes);
         addDynamicRoutes(routes);
+        storageHandler.setItem("routes", JSON.stringify(routes));
 
         // storageHandler.setItem("menuList", JSON.stringify(menu));
 

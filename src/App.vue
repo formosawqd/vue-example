@@ -11,6 +11,8 @@
 import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
 import { getRoute } from "@/api/index";
 import { storageHandler } from "@/utils/index";
+import router, { addDynamicRoutes } from "@/router";
+
 export default {
   data() {
     return {
@@ -20,10 +22,16 @@ export default {
   created() {},
   mounted() {
     console.log("加载了app");
+    this.init();
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    init() {
+      let routes = JSON.parse(sessionStorage.getItem("routes"));
+      routes && addDynamicRoutes(routes);
+    },
+  },
 };
 </script>
 
