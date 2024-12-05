@@ -2,7 +2,7 @@
   <div class="app-container">
     <a-card
       style="height: 100%"
-      title="美化列表"
+      title=" 列表"
       :bordered="false"
       class="list-card"
     >
@@ -53,7 +53,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
 }
 
 .list-card {
@@ -62,6 +62,8 @@ export default {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   background-color: white;
+  height: 100%;
+  overflow: auto;
 }
 
 .list {

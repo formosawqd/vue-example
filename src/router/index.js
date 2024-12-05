@@ -10,18 +10,34 @@ VueRouter.prototype.push = function push(location) {
 };
 const routes = [
   {
+    path: "/",
+    redirect: "/intro",
+  }, // 访问根路径时重定向到 /home
+  {
     path: "/home",
     name: "Home",
-    // redirect: "/table",
+    // redirect: "/home",
     component: () =>
       import(/* webpackChunkName: "home" */ "../views/home/home.vue"),
     children: [],
   }, // 访问根路径时重定向到 /home
   {
+    path: "/intro",
+    name: "intro",
+    component: () =>
+      import(/* webpackChunkName: "intro" */ "../views/intro/intro.vue"),
+  },
+  {
     path: "/login",
     name: "login",
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/login/Login.vue"),
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: () =>
+      import(/* webpackChunkName: "test" */ "../views/test/index.vue"),
   },
   // ...routeList,
 ];
@@ -30,6 +46,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  console.log("beforeEach", to);
+
   const isAuthenticated = !!sessionStorage.getItem("token"); // 判断是否有登录标识（如 token）
   if (to.meta.requiresAuth && !isAuthenticated) {
     // 如果目标路由需要登录且用户未登录

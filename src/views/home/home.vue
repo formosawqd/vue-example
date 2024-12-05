@@ -4,7 +4,11 @@
       width="160"
       style="height: 100vh"
       class="site-layout-background"
+      :collapsed="collapsed"
     >
+      <div class="collapse-btn" @click="toggleCollapsed">
+        <a-icon :type="collapsed ? 'menu-unfold' : 'menu-fold'" />
+      </div>
       <a-menu
         mode="inline"
         :default-selected-keys="[selectedKey]"
@@ -14,6 +18,7 @@
         @openChange="handleOpenChange"
         :selectedKey="selectedKey"
         theme="dark"
+        :inline-collapsed="collapsed"
       >
         <!-- 动态渲染菜单项 -->
         <template v-for="menuItem in menuData">
@@ -56,6 +61,7 @@ export default {
     return {
       menuData: [], // 存储从后端获取的菜单数据
       openKeys: [], // Tracks which sub-menus are expanded
+      collapsed: false,
     };
   },
   async created() {},
@@ -69,6 +75,9 @@ export default {
     this.init();
   },
   methods: {
+    toggleCollapsed() {
+      this.collapsed = !this.collapsed;
+    },
     init() {
       try {
         this.menuData = JSON.parse(sessionStorage.getItem("menuList"));
@@ -108,6 +117,16 @@ export default {
 </script>
 
 <style scoped lang="less">
+/* 折叠按钮样式 */
+.collapse-btn {
+  position: absolute;
+  top: 20px;
+  right: -20px;
+  cursor: pointer;
+  z-index: 10;
+  color: #fff;
+  font-size: 18px;
+}
 .site-layout-background {
   background: #fff;
 }

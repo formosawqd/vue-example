@@ -9,6 +9,8 @@ import "ant-design-vue/dist/antd.css";
 import moment from "moment";
 import "moment/locale/zh-cn";
 import MessagePlugin from "@/utils/message"; // 引入封装的插件
+import "brainy-style";
+import "@/assets/css/global.less";
 
 Vue.use(MessagePlugin); // 挂载自定义的 $message 方法
 
