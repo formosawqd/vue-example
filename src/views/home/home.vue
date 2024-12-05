@@ -42,7 +42,7 @@
     <a-layout style="height: 100%">
       <a-layout-header class="header" style="height: 80px">
         <div class="logo">
-          <img src="../../assets/img/1 (1).png" alt="" />
+          <!-- <img src="../../assets/img/1 (1).png" alt="" /> -->
         </div>
         <a-button class="btn" @click="logout"> exit</a-button></a-layout-header
       >
