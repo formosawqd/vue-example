@@ -46,7 +46,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("beforeEach", to);
+  // console.log("beforeEach", to);
 
   const isAuthenticated = !!sessionStorage.getItem("token"); // 判断是否有登录标识（如 token）
   if (to.meta.requiresAuth && !isAuthenticated) {
