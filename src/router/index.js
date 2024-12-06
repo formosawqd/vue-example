@@ -39,6 +39,11 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "test" */ "../views/test/index.vue"),
   },
+  {
+    path: "*", // 捕获所有未匹配到的路由
+    component: () =>
+      import(/* webpackChunkName: "intro" */ "../views/NotFound.vue"), // 404 页面
+  },
   // ...routeList,
 ];
 const router = new VueRouter({
