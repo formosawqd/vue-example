@@ -11,6 +11,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     role: "", // 当前用户角色
+    permissions: JSON.parse(sessionStorage.getItem("permissions")) || [], // 存储用户权限列表
     routes: [], // 动态加载的路由
     collectInfo: {
       name: 1,
@@ -22,6 +23,9 @@ export default new Vuex.Store({
 
       state.role = role;
     },
+    setPermissions(state, permissions) {
+      state.permissions = permissions;
+    },
     setRoutes(state, routes) {
       state.routes = routes;
     },
@@ -32,7 +36,7 @@ export default new Vuex.Store({
   },
   actions: {
     async login({ commit }, { username, password }) {
-      const { role, routes, token, message } = await login({
+      const { role, permissions, token, message } = await login({
         username,
         password,
       });
@@ -42,9 +46,15 @@ export default new Vuex.Store({
           type: "success",
         });
 
+        // 获取token 和角色
         sessionStorage.setItem("token", token);
         commit("setRole", role);
         storageHandler.setItem("role", role);
+        // 获取权限
+        console.log("permissions", permissions);
+
+        storageHandler.setItem("permissions", JSON.stringify(permissions));
+        commit("setPermissions", permissions);
 
         // 获取菜单
         const { menu } = await getMenu({ role });
@@ -62,6 +72,11 @@ export default new Vuex.Store({
         sessionStorage.setItem("menuList", JSON.stringify(menu));
         router.push({ path: "/home" });
       }
+    },
+  },
+  getters: {
+    hasPermission: (state) => {
+      return state.permissions;
     },
   },
 });

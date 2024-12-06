@@ -49,12 +49,21 @@ router.beforeEach((to, from, next) => {
   // console.log("beforeEach", to);
 
   const isAuthenticated = !!sessionStorage.getItem("token"); // 判断是否有登录标识（如 token）
+  console.log("isAuthenticated", isAuthenticated);
+  console.log("to.path", to.path);
+
   if (to.meta.requiresAuth && !isAuthenticated) {
     // 如果目标路由需要登录且用户未登录
     next("/login"); // 跳转到登录页
-  } else if (to.path === "/login" && isAuthenticated) {
+  } else if (isAuthenticated) {
     // 如果用户已登录，防止访问登录页或欢迎页
-    next("/home");
+    if (to.path === "/login") {
+      next("/home");
+    } else if (to.path === "/intro") {
+      next("/home");
+    } else {
+      next(); // 放行
+    }
   } else {
     next(); // 放行
   }
@@ -69,6 +78,7 @@ const transformRoutes = (routes) => {
       path: route.path,
       name: route.name,
       component: () =>
+        // 这里的异步加载组件得注意写法，如果全是变量，好像就不行，
         import("@/views/" + route.folder + "/" + route.file + ".vue"), // 这里非得用+拼接才正常
       meta: route.meta || {},
       children: route.children ? transformRoutes(route.children) : undefined,
@@ -83,6 +93,7 @@ export const addDynamicRoutes = (backendRoutes) => {
   const homeRoute = router.options.routes.find((route) => route.name == "Home");
   if (homeRoute && !homeRoute.children?.length) {
     homeRoute.children = [...homeRoute.children, ...transformedRoutes];
+    // 这里是直接把新的home组件，覆盖了之前的home组件，addRoute好像只能添加最外层的路由，如果要添加子路由，就要自己找到对应的路由，操作children
     router.addRoute(homeRoute); // 更新路由
   }
 };

@@ -14,7 +14,8 @@
     </keep-alive>
     <!-- component动态组件每次都会mounted 。 如果加了keep-alive，只有切换tab的第一次会触发mounted,其余的时候都不会-->
     <!-- activated 是在被包裹了keep-alive之后的每次切换tab会触发 -->
-    <!-- deactivated 和 activated 是被包裹了keep-alive之后才会有的生命周期，切换tab就会触发当前的tab 的deactivated，触发另一个tab 的 activated -->
+    <!-- deactivated 和 activated ，切换tab就会触发当前的tab 的deactivated，触发另一个tab 的 activated -->
+    <!-- 在 keep-alive 的场景下，activated 会优先于 mounted 被调用，但 mounted 只会在首次挂载时触发一次 -->
   </div>
 </template>
 
