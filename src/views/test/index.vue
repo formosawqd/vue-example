@@ -1,52 +1,153 @@
 <template>
-  <div>
-    <h1>Vue 2 - Add Property with Vue.set</h1>
-    <a-button @click="edit"></a-button>
-    <pre>{{ obj }}</pre>
-    <div v-for="item in arr" :key="item">
-      {{ item }}
-    </div>
-  </div>
+  <a-table
+    bordered
+    :columns="columns"
+    :components="components"
+    :data-source="datas"
+  >
+    <template v-slot:action>
+      <a href="javascript:;">Delete</a>
+    </template>
+  </a-table>
 </template>
 
 <script>
+import Vue from "vue";
+import VueDraggableResizable from "vue-draggable-resizable";
+Vue.component("vue-draggable-resizable", VueDraggableResizable);
+
 export default {
+  name: "App",
   data() {
     return {
-      obj: {}, // 初始是一个空对象
-      arr: [1, 2, 3],
+      datas: [
+        {
+          key: 0,
+          date: "2018-02-11",
+          amount: 120,
+          type: "income",
+          note: "transfer",
+        },
+        {
+          key: 1,
+          date: "2018-03-11",
+          amount: 243,
+          type: "income",
+          note: "transfer",
+        },
+        {
+          key: 2,
+          date: "2018-04-11",
+          amount: 98,
+          type: "income",
+          note: "transfer",
+        },
+      ],
+      columns: [
+        {
+          title: "Date",
+          dataIndex: "date",
+          width: 200,
+        },
+        {
+          title: "Amount",
+          dataIndex: "amount",
+          width: 100,
+        },
+        {
+          title: "Type",
+          dataIndex: "type",
+          width: 100,
+        },
+        {
+          title: "Note",
+          dataIndex: "note",
+          width: 100,
+        },
+        {
+          title: "Action",
+          key: "action",
+          scopedSlots: { customRender: "action" },
+        },
+      ],
+      components: null,
     };
   },
-  mounted() {
-    this.addProperty();
+  created() {
+    this.init();
   },
+  mounted() {},
   methods: {
-    addProperty() {},
-    edit() {
-      this.arr = [...this.arr, ...[4, 5, 6]];
+    init() {
+      const draggingMap = {};
+      this.columns.forEach((col) => {
+        draggingMap[col.key] = col.width;
+      });
+      const draggingState = Vue.observable(draggingMap);
+      const resizeableTitle = (h, props, children) => {
+        let thDom = null;
+        const { key, ...restProps } = props;
+        console.log(key);
+
+        const col = this.columns.find((col) => {
+          const k = col.dataIndex || col.key;
+          return k === key;
+        });
+        if (!col.width) {
+          return <th {...restProps}>{children}</th>;
+        }
+        const onDrag = (x) => {
+          draggingState[key] = 0;
+          col.width = Math.max(x, 1);
+        };
+        const onDragstop = () => {
+          draggingState[key] = thDom.getBoundingClientRect().width;
+        };
+        return (
+          <th
+            {...restProps}
+            v-ant-ref={(r) => (thDom = r)}
+            width={col.width}
+            class="resize-table-th"
+          >
+            {children}
+            <vue-draggable-resizable
+              key={col.key}
+              class="table-draggable-handle"
+              w={10}
+              x={draggingState[key] || col.width}
+              z={1}
+              axis="x"
+              draggable={true}
+              resizable={false}
+              onDragging={onDrag}
+              onDragstop={onDragstop}
+            ></vue-draggable-resizable>
+          </th>
+        );
+      };
+      this.components = {
+        header: {
+          cell: resizeableTitle,
+        },
+      };
     },
   },
 };
 </script>
 
-<style scoped>
-h1 {
-  color: #42b983;
-}
-pre {
-  font-size: 16px;
-  background: #f4f4f4;
-  padding: 10px;
-}
-button {
-  padding: 8px 16px;
-  font-size: 16px;
-  background-color: #42b983;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #355c3c;
+<style lang="less">
+.resize-table-th {
+  position: relative;
+  .table-draggable-handle {
+    transform: none !important;
+    position: absolute;
+    height: 100% !important;
+    bottom: 0;
+    left: auto !important;
+    right: -5px;
+    cursor: col-resize;
+    touch-action: none;
+  }
 }
 </style>

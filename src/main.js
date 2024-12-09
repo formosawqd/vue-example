@@ -18,8 +18,8 @@ Vue.use(MessagePlugin); // 挂载自定义的 $message 方法
 moment.locale("zh-cn");
 Vue.prototype.$moment = moment;
 // 挂载全局使用的方法
-// import VueDraggableResizable from 'vue-draggable-resizable'
-// Vue.component('vue-draggable-resizable', VueDraggableResizable)
+import VueDraggableResizable from "vue-draggable-resizable";
+Vue.component("vue-draggable-resizable", VueDraggableResizable);
 
 Vue.use(Antd);
 
