@@ -5,6 +5,7 @@ import { Message } from "element-ui";
 import { login, getMenu, getRoute } from "@/api/index";
 import { storageHandler } from "@/utils/index";
 import router, { loadDynamicRoutes, addDynamicRoutes } from "@/router";
+import CryptoJS from "crypto-js";
 
 Vue.use(Vuex);
 
@@ -36,9 +37,14 @@ export default new Vuex.Store({
   },
   actions: {
     async login({ commit }, { username, password }) {
+      const encryptedPassword = CryptoJS.AES.encrypt(
+        password,
+        "your-secret-key"
+      ).toString();
+
       const { role, permissions, token, message } = await login({
         username,
-        password,
+        password: encryptedPassword,
       });
       if (message == "登录成功") {
         Message({
