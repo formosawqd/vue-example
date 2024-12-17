@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import CryptoJS from "crypto-js";
 export default {
   name: "Login",
   data() {
@@ -48,10 +49,14 @@ export default {
   },
   methods: {
     async login() {
+      const encryptedPassword = CryptoJS.AES.encrypt(
+        this.loginForm.password,
+        "your-secret-key"
+      ).toString();
       try {
         this.$store.dispatch("login", {
           username: this.loginForm.username,
-          password: this.loginForm.password,
+          password: encryptedPassword,
         });
       } catch (error) {}
     },

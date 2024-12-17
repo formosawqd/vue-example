@@ -37,14 +37,9 @@ export default new Vuex.Store({
   },
   actions: {
     async login({ commit }, { username, password }) {
-      const encryptedPassword = CryptoJS.AES.encrypt(
-        password,
-        "your-secret-key"
-      ).toString();
-
       const { role, permissions, token, message } = await login({
         username,
-        password: encryptedPassword,
+        password,
       });
       if (message == "登录成功") {
         Message({
