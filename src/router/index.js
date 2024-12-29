@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import { routeList } from "./routes";
+import { isLogin } from "@/utils/index";
 Vue.use(VueRouter);
 //获取原型对象上的push函数
 const originalPush = VueRouter.prototype.push;
@@ -51,27 +52,25 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // console.log("beforeEach", to);
+  console.log("加载了router.beforeEach");
+  console.log("是否登录:", isLogin());
+  console.log("目标路径:", to.path);
 
-  const isAuthenticated = !!sessionStorage.getItem("token"); // 判断是否有登录标识（如 token）
-  console.log("isAuthenticated", isAuthenticated);
-  console.log("to.path", to.path);
-
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    // 如果目标路由需要登录且用户未登录
-    next("/login"); // 跳转到登录页
-  } else if (isAuthenticated) {
-    // 如果用户已登录，防止访问登录页或欢迎页
-    if (to.path === "/login") {
-      next("/home");
-    } else if (to.path === "/intro") {
-      next("/home");
-    } else {
-      next(); // 放行
-    }
-  } else {
-    next(); // 放行
+  if (!isLogin() && to.path !== "/login") {
+    // 用户未登录，且目标路径不是登录页，跳转到登录页
+    console.log("未登录，跳转到登录页");
+    return next("/login");
   }
+
+  if (isLogin() && (to.path === "/login" || to.path === "/intro")) {
+    // 已登录用户访问登录页或欢迎页，跳转到主页
+    console.log("已登录用户，重定向到主页");
+    return next("/home");
+  }
+
+  // 其他情况放行
+  console.log("放行目标路径");
+  next();
 });
 
 // Dynamic Import Function
