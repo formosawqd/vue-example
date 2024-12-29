@@ -9,10 +9,10 @@
         <button @click="getFile" class="fetch-button">获取文件列表</button>
       </div>
       <transition-group name="list" tag="ul" class="file-list">
-        <li v-for="(file, index) in fileList" :key="index" class="file-item">
+        <li v-for="item in fileList" :key="item.key" class="file-item">
           <div class="file-info">
             <span class="file-icon">📄</span>
-            <span class="file-name">{{ file }}</span>
+            <span class="file-name">{{ item.file }}</span>
           </div>
           <button class="download-button" @click="download(file)">下载</button>
         </li>
@@ -37,7 +37,7 @@ export default {
     async getFile() {
       let res = await getFiles();
       console.log(res);
-      this.fileList = res.files;
+      this.fileList = res.files.map((el, i) => ({ file: el, key: i }));
     },
     async download(filename) {
       try {

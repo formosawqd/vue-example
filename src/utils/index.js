@@ -1,3 +1,5 @@
+import router, { addDynamicRoutes } from "@/router";
+
 // 封装 sessionStorage 访问逻辑
 export const storageHandler = {
   // 存储回调函数，用于监听 sessionStorage 的变化
@@ -37,4 +39,13 @@ export const storageHandler = {
   //   // 获取 sessionStorage 数据
   //   console.log('User:', storageHandler.getItem('user')); // 输出: User: John Doe
   //   console.log('Role:', storageHandler.getItem('role')); // 输出: Role: admin
+};
+
+// 判断是否登录
+export const isLogin = () => !!sessionStorage.getItem("token");
+
+// 判断是否有路由，已经存在的话就动态新增路由，解决刷新的问题
+export const getRoutes = () => {
+  let routes = JSON.parse(sessionStorage.getItem("routes"));
+  routes && addDynamicRoutes(routes);
 };
