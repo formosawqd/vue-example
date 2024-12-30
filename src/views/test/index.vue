@@ -7,7 +7,7 @@
           {{ tag }}
         </a-tag>
         <a-button size="small" v-if="hasMoreTags" @click="showMoreTags"
-          >。。。更多</a-button
+          >更多</a-button
         >
       </a-space>
       <a-modal v-model="isModalVisible" title="更多标签">
@@ -27,11 +27,11 @@ export default {
     return {
       allTags: [
         "标签洒洒水1",
-        "标签as2",
-        "标签as4水水水水",
+        "标签ssssas2",
+        "标签as4水sssssssssss水水水",
         "标签5",
-        "标签6水水水",
-        "标ass签7s",
+        "标签sssssssssss6水水水",
+        "标assssssssssssss签7s",
         "标签8",
       ],
       visibleTags: [], // 动态显示的标签
@@ -51,12 +51,17 @@ export default {
     },
     calculateVisibleTags() {
       const container = this.$refs.rightContainer;
+
       if (container) {
         const containerWidth = container.offsetWidth;
+        console.log("containerWidth", containerWidth);
+
         const tagWidth = 100; // 估算每个标签的宽度，可以根据实际情况调整
         const maxTags = Math.floor(containerWidth / tagWidth); // 根据容器宽度计算最大可显示的标签数量
-        // this.visibleTags = [...this.allTags.slice(0, maxTags - 1), "..."];
-        this.visibleTags = this.allTags.slice(0, maxTags);
+        console.log("maxTags", maxTags);
+
+        this.visibleTags = [...this.allTags.slice(0, maxTags - 1), "。。。"];
+        // this.visibleTags = this.allTags.slice(0, maxTags);
       }
     },
   },
@@ -95,8 +100,6 @@ export default {
 .right {
   display: flex;
   flex: auto; /* 使右边部分占满剩余空间 */
-  justify-content: flex-start; /* 从左向右排列标签 */
-  align-items: center;
 }
 
 a-button {
