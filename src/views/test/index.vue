@@ -1,153 +1,105 @@
 <template>
-  <a-table
-    bordered
-    :columns="columns"
-    :components="components"
-    :data-source="datas"
-  >
-    <template v-slot:action>
-      <a href="javascript:;">Delete</a>
-    </template>
-  </a-table>
+  <div class="container">
+    <div class="left">画像取值：</div>
+    <div class="right" ref="rightContainer">
+      <a-space wrap>
+        <a-tag v-for="(tag, index) in visibleTags" :key="index">
+          {{ tag }}
+        </a-tag>
+        <a-button size="small" v-if="hasMoreTags" @click="showMoreTags"
+          >。。。更多</a-button
+        >
+      </a-space>
+      <a-modal v-model="isModalVisible" title="更多标签">
+        <a-space direction="vertical">
+          <a-tag v-for="(tag, index) in allTags" :key="index">
+            {{ tag }}
+          </a-tag>
+        </a-space>
+      </a-modal>
+    </div>
+  </div>
 </template>
 
 <script>
-import Vue from "vue";
-import VueDraggableResizable from "vue-draggable-resizable";
-Vue.component("vue-draggable-resizable", VueDraggableResizable);
-
 export default {
-  name: "App",
   data() {
     return {
-      datas: [
-        {
-          key: 0,
-          date: "2018-02-11",
-          amount: 120,
-          type: "income",
-          note: "transfer",
-        },
-        {
-          key: 1,
-          date: "2018-03-11",
-          amount: 243,
-          type: "income",
-          note: "transfer",
-        },
-        {
-          key: 2,
-          date: "2018-04-11",
-          amount: 98,
-          type: "income",
-          note: "transfer",
-        },
+      allTags: [
+        "标签洒洒水1",
+        "标签as2",
+        "标签as4水水水水",
+        "标签5",
+        "标签6水水水",
+        "标ass签7s",
+        "标签8",
       ],
-      columns: [
-        {
-          title: "Date",
-          dataIndex: "date",
-          width: 200,
-        },
-        {
-          title: "Amount",
-          dataIndex: "amount",
-          width: 100,
-        },
-        {
-          title: "Type",
-          dataIndex: "type",
-          width: 100,
-        },
-        {
-          title: "Note",
-          dataIndex: "note",
-          width: 100,
-        },
-        {
-          title: "Action",
-          key: "action",
-          scopedSlots: { customRender: "action" },
-        },
-      ],
-      components: null,
+      visibleTags: [], // 动态显示的标签
+      isModalVisible: false,
+      containerWidth: 0,
+      resizeTimeout: null,
     };
   },
-  created() {
-    this.init();
-  },
-  mounted() {},
-  methods: {
-    init() {
-      const draggingMap = {};
-      this.columns.forEach((col) => {
-        draggingMap[col.key] = col.width;
-      });
-      const draggingState = Vue.observable(draggingMap);
-      const resizeableTitle = (h, props, children) => {
-        let thDom = null;
-        const { key, ...restProps } = props;
-        console.log(key);
-
-        const col = this.columns.find((col) => {
-          const k = col.dataIndex || col.key;
-          return k === key;
-        });
-        if (!col.width) {
-          return <th {...restProps}>{children}</th>;
-        }
-        const onDrag = (x) => {
-          draggingState[key] = 0;
-          col.width = Math.max(x, 1);
-        };
-        const onDragstop = () => {
-          draggingState[key] = thDom.getBoundingClientRect().width;
-        };
-        return (
-          <th
-            {...restProps}
-            v-ant-ref={(r) => (thDom = r)}
-            width={col.width}
-            class="resize-table-th"
-          >
-            {children}
-            <vue-draggable-resizable
-              key={col.key}
-              class="table-draggable-handle"
-              w={10}
-              x={draggingState[key] || col.width}
-              z={1}
-              axis="x"
-              draggable={true}
-              resizable={false}
-              onDragging={onDrag}
-              onDragstop={onDragstop}
-            ></vue-draggable-resizable>
-          </th>
-        );
-      };
-      this.components = {
-        header: {
-          cell: resizeableTitle,
-        },
-      };
+  computed: {
+    hasMoreTags() {
+      return this.allTags.length > this.visibleTags.length;
     },
+  },
+  methods: {
+    showMoreTags() {
+      this.isModalVisible = true;
+    },
+    calculateVisibleTags() {
+      const container = this.$refs.rightContainer;
+      if (container) {
+        const containerWidth = container.offsetWidth;
+        const tagWidth = 100; // 估算每个标签的宽度，可以根据实际情况调整
+        const maxTags = Math.floor(containerWidth / tagWidth); // 根据容器宽度计算最大可显示的标签数量
+        // this.visibleTags = [...this.allTags.slice(0, maxTags - 1), "..."];
+        this.visibleTags = this.allTags.slice(0, maxTags);
+      }
+    },
+  },
+  mounted() {
+    this.calculateVisibleTags(); // 初次计算可显示的标签数量
+    // const resizeObserver = new ResizeObserver(() => {
+    //   if (this.resizeTimeout) {
+    //     clearTimeout(this.resizeTimeout); // 清除上一个超时
+    //   }
+    //   this.resizeTimeout = setTimeout(() => {
+    //     this.calculateVisibleTags(); // 延迟执行计算，避免多次触发更新
+    //   }, 50); // 延迟 50ms 以防止多次触发
+    // });
+    // resizeObserver.observe(this.$refs.rightContainer); // 监听容器宽度变化
+  },
+  beforeDestroy() {
+    // 清除 ResizeObserver
+    // if (this.resizeTimeout) {
+    //   clearTimeout(this.resizeTimeout);
+    // }
   },
 };
 </script>
 
-<style lang="less">
-.resize-table-th {
-  position: relative;
-  .table-draggable-handle {
-    transform: none !important;
-    position: absolute;
-    height: 100% !important;
-    bottom: 0;
-    left: auto !important;
-    right: -5px;
-    cursor: col-resize;
-    touch-action: none;
-  }
+<style scoped>
+.container {
+  display: flex;
+}
+
+.left {
+  width: 80px;
+  /* white-space: nowrap; */
+  /* font-weight: bold; */
+}
+
+.right {
+  display: flex;
+  flex: auto; /* 使右边部分占满剩余空间 */
+  justify-content: flex-start; /* 从左向右排列标签 */
+  align-items: center;
+}
+
+a-button {
+  margin-left: 8px;
 }
 </style>
