@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router, { addDynamicRoutes } from "@/router";
 import store from "./store";
-import ElementUI from "element-ui";
+// import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
@@ -13,6 +13,9 @@ import MessagePlugin from "@/utils/message"; // 引入封装的插件
 import "brainy-style";
 import "@/assets/css/global.less";
 import { getRoutes } from "@/utils/index";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+Vue.use(Loading);
 
 Vue.use(MessagePlugin); // 挂载自定义的 $message 方法
 
@@ -26,7 +29,7 @@ Vue.use(Antd);
 
 Vue.config.productionTip = false;
 
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 getRoutes();
 
 new Vue({

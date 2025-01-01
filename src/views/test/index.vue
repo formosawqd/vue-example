@@ -2,7 +2,7 @@
   <div class="container">
     <div class="left">画像取值：</div>
     <div class="right" ref="rightContainer">
-      <a-space wrap>
+      <a-space id="wapper" wrap>
         <a-tag v-for="(tag, index) in visibleTags" :key="index">
           {{ tag }}
         </a-tag>
@@ -61,6 +61,8 @@ export default {
         console.log("maxTags", maxTags);
 
         this.visibleTags = [...this.allTags.slice(0, maxTags - 1), "。。。"];
+        let wapperW = document.getElementById("wapper").offsetWidth;
+        console.log("wapperW", wapperW);
         // this.visibleTags = this.allTags.slice(0, maxTags);
       }
     },
