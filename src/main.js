@@ -5,6 +5,8 @@ import store from "./store";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import Antd from "ant-design-vue";
+import * as echarts from "echarts";
+
 import "ant-design-vue/dist/antd.css";
 import moment from "moment";
 import "moment/locale/zh-cn";
@@ -21,6 +23,8 @@ Vue.use(MessagePlugin); // 挂载自定义的 $message 方法
 
 moment.locale("zh-cn");
 Vue.prototype.$moment = moment;
+Vue.prototype.$echarts = echarts;
+
 // 挂载全局使用的方法
 import VueDraggableResizable from "vue-draggable-resizable";
 Vue.component("vue-draggable-resizable", VueDraggableResizable);
