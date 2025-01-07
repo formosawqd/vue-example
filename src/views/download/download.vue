@@ -14,7 +14,9 @@
             <span class="file-icon">📄</span>
             <span class="file-name">{{ item.file }}</span>
           </div>
-          <button class="download-button" @click="download(file)">下载</button>
+          <button class="download-button" @click="download(item.file)">
+            下载
+          </button>
         </li>
       </transition-group>
       <p v-if="fileList.length === 0" class="empty-text">暂无文件</p>
