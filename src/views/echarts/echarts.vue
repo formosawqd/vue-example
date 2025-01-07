@@ -10,19 +10,17 @@ export default {
   data() {
     return {
       chart: null,
-      // 图表的初始数据
       categories: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
       data: [5, 20, 36, 10, 10, 5, 25, 15, 30, 50],
+      resizeObserver: null, // 保存 ResizeObserver 实例
     };
   },
   methods: {
     // 函数：动态调整图表的 xAxis 数据和 grid 配置
     adjustChartData() {
-      console.log(1111);
+      console.log("调整图表数据");
       // 获取当前 box 容器的宽度
       const containerWidth = this.$refs.box.offsetWidth;
-      console.log(containerWidth);
-
       // 基于容器宽度调整显示的条数
       let numVisibleData = Math.max(5, Math.floor(containerWidth / 100)); // 宽度每增加100px，显示更多的数据，最小显示5条数据，最多显示20条数据
       if (numVisibleData > 20) numVisibleData = 20; // 限制最多显示20条数据
@@ -87,15 +85,15 @@ export default {
     this.chart.setOption(option);
 
     // 初始调整一次
-    this.adjustChartData();
+    // this.adjustChartData();
 
     // 使用 ResizeObserver 来监听父容器 (box) 的大小变化
-    const resizeObserver = new ResizeObserver(() => {
+    this.resizeObserver = new ResizeObserver(() => {
       this.adjustChartData(); // 容器大小变化时重新调整图表
     });
 
     // 开始观察父容器的大小变化
-    resizeObserver.observe(this.$refs.box);
+    this.resizeObserver.observe(this.$refs.box);
 
     // 窗口resize时，自动调整图表的数据和显示区域
     window.addEventListener("resize", this.adjustChartData);
@@ -108,8 +106,29 @@ export default {
 
     // 移除 resize 事件监听
     window.removeEventListener("resize", this.adjustChartData);
+
+    // 停止 ResizeObserver 监听
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* 确保整个页面的布局是响应式的 */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#app {
+  height: 100%;
+}
+
+div {
+  height: 100%;
+}
+</style>
